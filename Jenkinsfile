@@ -5,19 +5,24 @@ pipeline{
     }
     stages{
         stage('CompileandRunSonarAnalysis'){
-            environment{
-                SONAR_HOST_URL = 'http://13.218.113.213:9000'
-                SONAR_AUTH_TOKEN = credentials('sonarQube')
-            }
-            steps{
-                sh 'mvn clean verify sonar:sonar -Dsonar.projectKey=sample_project -Dsonar.host.url=$SONAR_HOST_URL -Dsonar.login=$SONAR_AUTH_TOKEN'
-            }
+            // environment{
+            //     SONAR_HOST_URL = 'http://13.218.113.213:9000'
+            //     SONAR_AUTH_TOKEN = credentials('sonarQube')
+            // }
+            // steps{
+            //     sh 'mvn clean verify sonar:sonar -Dsonar.projectKey=sample_project -Dsonar.host.url=$SONAR_HOST_URL -Dsonar.login=$SONAR_AUTH_TOKEN'
+            // }
             // steps{
             //    withSonarQubeEnv(installationName: 'sonar-9', credentialsId:'sonarToken') {
             //        sh 'mvn clean package'
                 
             //    }
             // }
+             steps{
+               withCredentials([string(credentialsId: 'sonarqube', variable: 'sonarqube')]) {
+                   sh 'mvn clean package sonar:sonar -Dsonar.login=$sonarqube -Dsonar.host.url=https://sonarcloud.io -Dsonar.projectKey=sonarqubeapp -Dsonar.organization=sonarqubeapp'
+               }
+             }
         }
 
         // // build docker image
