@@ -5,13 +5,19 @@ pipeline{
     }
     stages{
         stage('CompileandRunSonarAnalysis'){
-            
-            steps{
-               withSonarQubeEnv(installationName: 'sonar-9', credentialsId:'sonarToken') {
-                   sh 'mvn clean package'
-                
-               }
+            environment{
+                SONAR_HOST_URL = 'http://13.218.113.213:9000'
+                SONAR_AUTH_TOKEN = credentials('sonarQube')
             }
+            steps{
+                sh 'mvn sonar:sonar -Dsonar.projectKey=sample_project -Dsonar.host.url=$SONAR_HOST_URL -Dsonar.login=$SONAR_AUTH_TOKEN'
+            }
+            // steps{
+            //    withSonarQubeEnv(installationName: 'sonar-9', credentialsId:'sonarToken') {
+            //        sh 'mvn clean package'
+                
+            //    }
+            // }
         }
 
         // // build docker image
