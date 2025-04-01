@@ -10,7 +10,7 @@ pipeline{
                 SONAR_AUTH_TOKEN = credentials('sonarQube')
             }
             steps{
-                sh 'mvn clean package sonar:sonar -Dsonar.projectKey=sample_project -Dsonar.host.url=$SONAR_HOST_URL -Dsonar.login=$SONAR_AUTH_TOKEN'
+                sh 'mvn clean verify sonar:sonar -Dsonar.projectKey=sample_project -Dsonar.host.url=$SONAR_HOST_URL -Dsonar.login=$SONAR_AUTH_TOKEN'
             }
             // steps{
             //    withSonarQubeEnv(installationName: 'sonar-9', credentialsId:'sonarToken') {
